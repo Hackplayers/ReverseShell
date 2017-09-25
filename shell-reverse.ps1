@@ -230,7 +230,7 @@ $banner1 = @"
                     ░                                                                              
 
 
-                                                                             by CyberVaca
+                                                                       CyberVaca @ HackPlayers
 "@
 
 Write-Host $banner1 -ForegroundColor red
