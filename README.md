@@ -2,7 +2,7 @@
 
 # Install in Debian or Kali
 
-    git clone https://github.com/cybervaca/ShellReverse
+    git clone https://github.com/Hackplayers/ShellReverse
     cd shellreverse
     sudo apt-get update > /dev/null
     sudo apt-get install libunwind8 libicu55  
