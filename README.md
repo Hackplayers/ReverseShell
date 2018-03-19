@@ -19,6 +19,7 @@
 &nbsp;&nbsp;&nbsp;**PHP**&nbsp;&nbsp;  
 &nbsp;&nbsp;&nbsp;**Java**&nbsp;&nbsp;  
 &nbsp;&nbsp;&nbsp;**Bash**&nbsp;&nbsp;  
+&nbsp;&nbsp;&nbsp;**Netcat**&nbsp;&nbsp;  
 &nbsp;&nbsp;&nbsp;**PowershellTCP**&nbsp;&nbsp;  
 &nbsp;&nbsp;&nbsp;**PowerrshellUDP**&nbsp;&nbsp;  
 &nbsp;&nbsp;&nbsp;**PowershellICMP**&nbsp;&nbsp;  
