@@ -296,7 +296,7 @@ write-host "powershell.exe+-win+hidden+-enc+$EncodedText"
 }
 
 function encodedurl {param($script)
-$script -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" -replace "\(","%28" -replace "\)","%29";$total = $script.Length - 3; $script = $script.Substring(0,$total)
+$script -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" -replace "\(","%28" -replace "\)","%29" -replace "\{","%7B" -replace "\}","%7D";$total = $script.Length - 3; $script = $script.Substring(0,$total)
 
 }
 
