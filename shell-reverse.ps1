@@ -1,5 +1,4 @@
-﻿function shell-reverse {
-param(
+﻿param(
 [string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$socat,[switch]$metasploit,[switch]$PowershellICMP,[switch]$PowershellTCP,[switch]$PowershellUDP
 
 )
@@ -389,5 +388,4 @@ if ($PowershellICMP -eq $true -and $metasploit -eq $true) {Write-Host "[" -Foreg
 if ($PowershellTCP -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellTCP (proximas updates...)`n" }
 if ($Powershelludp -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellUDP (proximas updates...)`n" }
 
-}
 }
