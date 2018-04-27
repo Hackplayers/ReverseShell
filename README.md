@@ -5,8 +5,10 @@
     git clone https://github.com/Hackplayers/ReverseShell
     cd shellreverse
     sudo apt-get update > /dev/null
-    wget http://http.us.debian.org/debian/pool/main/libu/libunwind/libunwind8_1.1-4.1_amd64.deb ; dpkg -i libunwind8_1.1-4.1_amd64.deb
-wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu55_55.1-7_amd64.deb; dpkg -i  libicu55_55.1-7_amd64.deb  
+    wget http://http.us.debian.org/debian/pool/main/libu/libunwind/libunwind8_1.1-4.1_amd64.deb 
+    sudo dpkg -i libunwind8_1.1-4.1_amd64.deb
+    wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu55_55.1-7_amd64.deb
+    sudo dpkg -i  libicu55_55.1-7_amd64.deb
     wget https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/powershell_6.0.0-alpha.13-1ubuntu1.16.04.1_amd64.deb
     sudo dpkg -i powershell_6.0.0-alpha.13-1ubuntu1.16.04.1_amd64.deb
     powershell
