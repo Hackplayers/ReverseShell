@@ -1,4 +1,16 @@
 # ShellReverse
+  
+ReverseShell is a simple PowerShell script that we can use for 1/ easing the process of creating a reverse shell (or inverse, as you prefer) with different payloads depending on the interpreter that supports the server (python, bash, perl, java, php or ruby) and 2 / automating the update to Meterpreter.  
+
+# Usage
+  
+Its syntax is very simple:  
+  
+  ./shell-reverse.ps1 -Lhost 10.10.10.1 -Lport 4444 -payload -web -metasploit  
+  
+- payload: python, python3, bash, perl, php, ruby, java  
+- web: encode the payload for URL (encoder)  
+- metasploit: start Metasploit and leave it waiting for session to update it to Meterpreter  
 
 # Install in Debian or Kali
 
