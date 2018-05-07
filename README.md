@@ -1,6 +1,6 @@
 # ShellReverse
   
-ReverseShell is a simple PowerShell script that we can use for 1/ easing the process of creating a reverse shell (or inverse, as you prefer) with different payloads depending on the interpreter that supports the server (python, bash, perl, java, php or ruby) and 2 / automating the update to Meterpreter.  
+ReverseShell is a simple PowerShell script that we can use for 1/ easing the process of creating a reverse shell with different payloads depending on the interpreter that supports the server (python, bash, perl, java, php or ruby) and 2 / automating the update to Meterpreter.  
 
 # Usage
   
